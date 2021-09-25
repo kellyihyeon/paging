@@ -72,4 +72,10 @@ public class SchedulesService {
         return responseDtoList;
     }
 
+    public Page<AllScheduleResponseDto> getAllSchedulesWithPage(Pageable pageable) {
+        final Page<Schedule> schedulePage = schedulesRepository.findAll(pageable);
+        return new PageImpl<AllScheduleResponseDto>(schedulePage.stream()
+                    .map(AllScheduleResponseDto::of)
+                    .collect(Collectors.toList()),pageable, schedulePage.getTotalElements());
+    }
 }

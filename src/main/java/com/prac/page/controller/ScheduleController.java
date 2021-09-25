@@ -27,7 +27,7 @@ public class ScheduleController {
         return ApiResponse.ok(all);
     }
 
-    // 쿼리 메서드 사용
+    // 쿼리 메서드 사용 - 닉네임으로 가져오기
     @GetMapping("/schedules/page/queryMethod")
     public ApiResponse<Page<AllScheduleResponseDto>> getScheduleByQueryMethod() {
         Pageable pageable = PageRequest.of(0, 3);
@@ -44,10 +44,18 @@ public class ScheduleController {
     }
 
     // spring web mvc 로 더 간단하게
-    @GetMapping("/schedules/page/mvc")
+
+    // Slice 로 받기
+    @GetMapping("/schedules/mvc/slice")
     public ApiResponse<AllScheduleWithSliceResponseDto> getAllSchedulesWithSlice(Pageable pageable) {
         final AllScheduleWithSliceResponseDto all = schedulesService.getAllSchedulesWithSlice(pageable);
         return ApiResponse.ok(all);
+    }
+
+    // Page 로 받기
+    @GetMapping("/schedules/mvc/page")
+    public ApiResponse<Page<AllScheduleResponseDto>> getAllSchedulesWithPage(Pageable pageable) {
+        return ApiResponse.ok(schedulesService.getAllSchedulesWithPage(pageable));
     }
 
     // 페이징 처리 하지 않은 메소드

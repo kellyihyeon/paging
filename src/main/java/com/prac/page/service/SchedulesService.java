@@ -13,9 +13,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,27 +24,19 @@ public class SchedulesService {
     private final SchedulesRepository schedulesRepository;
 
 
+    // 안좋은 사례 - entity 를 그대로 넘긴다.
     public Page<Schedule> getAllSchedulesUsingPaging(Pageable pageable) {
         return schedulesRepository.findAll(pageable);
     }
 
     public AllScheduleWithSliceResponseDto getAllSchedulesWithSlice(Pageable pageable) {
-        final Slice<Schedule> schedulesWithSlice = schedulesRepository.findBy(pageable);
-
         List<AllScheduleResponseDto> responseDtoList = new ArrayList<>();
 
-        for (Schedule schedule : schedulesWithSlice) {
-            responseDtoList.add(
-                    AllScheduleResponseDto.builder()
-                            .scheduleId(schedule.getId())
-                            .title(schedule.getTitle())
-                            .nickname(schedule.getMember().getNickname())
-                            .build());
-        }
+        final Slice<Schedule> scheduleSlice = schedulesRepository.findBy(pageable);
+        scheduleSlice.stream()
+                .forEach(schedule -> responseDtoList.add(AllScheduleResponseDto.of(schedule)));
 
-
-        return AllScheduleWithSliceResponseDto.of(responseDtoList, schedulesWithSlice.hasNext());
-
+        return AllScheduleWithSliceResponseDto.of(responseDtoList, scheduleSlice);
     }
 
 
@@ -58,7 +48,6 @@ public class SchedulesService {
                 .map(AllScheduleResponseDto::of)
                 .collect(Collectors.toList()),pageable, schedules.getTotalElements());
     }
-
 
 
     // main

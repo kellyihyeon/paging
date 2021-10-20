@@ -1,6 +1,7 @@
 package com.prac.page.controller;
 
 import com.prac.page.common.ApiResponse;
+import com.prac.page.dto.AllContentsResponseDto;
 import com.prac.page.dto.AllScheduleResponseDto;
 import com.prac.page.dto.AllScheduleWithSliceResponseDto;
 import com.prac.page.entity.Schedule;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -50,6 +52,12 @@ public class ScheduleController {
     public ApiResponse<AllScheduleWithSliceResponseDto> getAllSchedulesWithSlice(Pageable pageable) {
         final AllScheduleWithSliceResponseDto all = schedulesService.getAllSchedulesWithSlice(pageable);
         return ApiResponse.ok(all);
+    }
+
+    // Slice 로 받기 2
+    @GetMapping("/schedules/page/slice")
+    public ApiResponse<SliceImpl<AllScheduleResponseDto>> getAllScheduleAndSlice(Pageable pageable) {
+        return ApiResponse.ok(schedulesService.getAllScheduleAndSlice(pageable));
     }
 
     // Page 로 받기

@@ -1,15 +1,13 @@
 package com.prac.page.service;
 
+import com.prac.page.dto.AllContentsResponseDto;
 import com.prac.page.entity.Schedule;
 import com.prac.page.dto.AllScheduleResponseDto;
 import com.prac.page.dto.AllScheduleWithSliceResponseDto;
 import com.prac.page.repository.SchedulesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -29,6 +27,7 @@ public class SchedulesService {
         return schedulesRepository.findAll(pageable);
     }
 
+    // slice
     public AllScheduleWithSliceResponseDto getAllSchedulesWithSlice(Pageable pageable) {
         List<AllScheduleResponseDto> responseDtoList = new ArrayList<>();
 
@@ -37,6 +36,16 @@ public class SchedulesService {
                 .forEach(schedule -> responseDtoList.add(AllScheduleResponseDto.of(schedule)));
 
         return AllScheduleWithSliceResponseDto.of(responseDtoList, scheduleSlice);
+    }
+
+
+    public SliceImpl<AllScheduleResponseDto> getAllScheduleAndSlice(Pageable pageable) {
+        final Slice<Schedule> schedules = schedulesRepository.findBy(pageable);
+
+        List<AllScheduleResponseDto> dtoList = new ArrayList<>();
+        schedules.forEach(schedule -> dtoList.add(AllScheduleResponseDto.of(schedule)));
+        return new SliceImpl<>(dtoList, pageable, schedules.hasNext());
+
     }
 
 

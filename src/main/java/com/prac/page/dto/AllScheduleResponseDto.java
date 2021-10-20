@@ -13,11 +13,11 @@ public class AllScheduleResponseDto {
 
     private final Long scheduleId;
 
-    private String title;
+    private final String title;
 
-    private String nickname;
+    private final String nickname;
 
-    private String details;
+    private final String details;
 
 
 

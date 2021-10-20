@@ -1,9 +1,9 @@
 package com.prac.page.controller;
 
 import com.prac.page.common.ApiResponse;
-import com.prac.page.dto.AllContentsResponseDto;
 import com.prac.page.dto.AllScheduleResponseDto;
 import com.prac.page.dto.AllScheduleWithSliceResponseDto;
+import com.prac.page.dto.SliceCustom;
 import com.prac.page.entity.Schedule;
 import com.prac.page.service.SchedulesService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +45,7 @@ public class ScheduleController {
         return ApiResponse.ok(all);
     }
 
+
     // spring web mvc 로 더 간단하게
 
     // Slice 로 받기
@@ -56,7 +57,7 @@ public class ScheduleController {
 
     // Slice 로 받기 2
     @GetMapping("/schedules/page/slice")
-    public ApiResponse<SliceImpl<AllScheduleResponseDto>> getAllScheduleAndSlice(Pageable pageable) {
+    public ApiResponse<SliceCustom<AllScheduleResponseDto>> getAllScheduleAndSlice(Pageable pageable) {
         return ApiResponse.ok(schedulesService.getAllScheduleAndSlice(pageable));
     }
 

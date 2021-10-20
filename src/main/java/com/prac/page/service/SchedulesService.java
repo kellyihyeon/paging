@@ -1,6 +1,6 @@
 package com.prac.page.service;
 
-import com.prac.page.dto.AllContentsResponseDto;
+import com.prac.page.dto.SliceCustom;
 import com.prac.page.entity.Schedule;
 import com.prac.page.dto.AllScheduleResponseDto;
 import com.prac.page.dto.AllScheduleWithSliceResponseDto;
@@ -39,13 +39,14 @@ public class SchedulesService {
     }
 
 
-    public SliceImpl<AllScheduleResponseDto> getAllScheduleAndSlice(Pageable pageable) {
+    // slice2
+    public SliceCustom<AllScheduleResponseDto> getAllScheduleAndSlice(Pageable pageable) {
         final Slice<Schedule> schedules = schedulesRepository.findBy(pageable);
-
         List<AllScheduleResponseDto> dtoList = new ArrayList<>();
         schedules.forEach(schedule -> dtoList.add(AllScheduleResponseDto.of(schedule)));
-        return new SliceImpl<>(dtoList, pageable, schedules.hasNext());
 
+        Slice<AllScheduleResponseDto> dtoSlice = new SliceImpl<>(dtoList, pageable, schedules.hasNext());
+        return new SliceCustom<>(dtoSlice.getContent(), dtoSlice.hasNext());
     }
 
 

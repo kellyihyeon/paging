@@ -13,5 +13,4 @@ public interface SchedulesRepository extends JpaRepository<Schedule, Long> {
     Slice<Schedule> findBy(Pageable pageable);
 
 
-
 }
